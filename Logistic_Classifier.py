@@ -6,7 +6,7 @@ Created on Wed Jul 10 22:38:56 2019
 """
 
 import pandas as pd
-from six.moves import urllib
+#from six.moves import urllib
 import shutil
 import tensorflow as tf
 
@@ -14,8 +14,8 @@ import tensorflow as tf
 Train_File_Name = "census/adult.data"
 Test_File_Name = "census/adult.test"
 
-urllib.request.urlretrieve("https://archive.ics.uci.edu/ml/machine-learning-databases/adult/adult.data", Train_File_Name)
-urllib.request.urlretrieve("https://archive.ics.uci.edu/ml/machine-learning-databases/adult/adult.test", Test_File_Name)
+#urllib.request.urlretrieve("https://archive.ics.uci.edu/ml/machine-learning-databases/adult/adult.data", Train_File_Name)
+#urllib.request.urlretrieve("https://archive.ics.uci.edu/ml/machine-learning-databases/adult/adult.test", Test_File_Name)
 
 
 CSV_Columns = ["age", "workclass", "fnlwgt", "education", "education_num",
@@ -64,7 +64,7 @@ def input_fn(File_Name, num_epochs, shuffle):
     
     df = df.dropna(how = 'any', axis = 0)
     
-    labels = df["income_bracket"].apply(lambda row: ">50k" in row).astype(int)
+    labels = df["income_bracket"].apply(lambda row: ">50K" in row).astype(int)
     
     return tf.estimator.inputs.pandas_input_fn(
             x = df,
@@ -79,7 +79,7 @@ shutil.rmtree(Model_DIR,ignore_errors = True)
 
 Linear_Model = tf.estimator.LinearClassifier(model_dir= Model_DIR, feature_columns= base_columns + crossed_columns +deep_columns)
 
-train = Linear_Model.train(input_fn(Train_File_Name, num_epochs=None, shuffle=True), steps=1000)
+Linear_Model.train(input_fn(Train_File_Name, num_epochs=None, shuffle=True), steps=1000)
 
 results = Linear_Model.evaluate(input_fn(Test_File_Name, num_epochs=1, shuffle=False), steps=None)
 
